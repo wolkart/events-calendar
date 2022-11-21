@@ -3,7 +3,7 @@ import {Card, Layout, Row} from "antd";
 import {AuthForm} from "../components/LoginForm";
 import Title from 'antd/lib/typography/Title';
 
-const Login: FC = () => {
+const Registration: FC = () => {
     return (
         <Layout>
             <Row
@@ -13,7 +13,7 @@ const Login: FC = () => {
             >
                 <Card>
                     <Row justify="center">
-                        <Title level={3}>Вход</Title>
+                        <Title level={3}>Регистрация</Title>
                     </Row>
                     <AuthForm/>
                 </Card>
@@ -22,4 +22,4 @@ const Login: FC = () => {
     );
 };
 
-export default Login;
+export default Registration;

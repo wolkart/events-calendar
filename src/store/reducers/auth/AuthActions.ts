@@ -16,6 +16,7 @@ export const AuthActions = {
                 const mockUser = response.data.find(user => user.username === username && user.password === password)
 
                 if (mockUser) {
+                    dispatch(AuthActions.setError(''))
                     localStorage.setItem("auth", "true")
                     localStorage.setItem("username", mockUser.username)
                     dispatch(AuthActions.setUser(mockUser))
@@ -35,5 +36,28 @@ export const AuthActions = {
         localStorage.removeItem("username")
         dispatch(AuthActions.setUser({} as IUser))
         dispatch(AuthActions.setIsAuth(false))
-    }
+    },
+    registration: (username: string, password: string) => async (dispatch: AppDispatch) => {
+        try {
+            dispatch(AuthActions.setIsLoading(true))
+            setTimeout(async () => {
+                const response = await UserService.getUsers()
+                const existingName = response.data.find(user => user.username === username)
+
+                if (!existingName) {
+                    dispatch(AuthActions.setError(''))
+                    localStorage.setItem("auth", "true")
+                    localStorage.setItem("username", username)
+                    dispatch(AuthActions.setUser({username, password}))
+                    dispatch(AuthActions.setIsAuth(true))
+                } else {
+                    dispatch(AuthActions.setError(`Пользаватель с имененм ${existingName.username} уже зарегистрирован.`))
+                }
+
+                dispatch(AuthActions.setIsLoading(false))
+            }, 1000)
+        } catch (e) {
+            dispatch(AuthActions.setError('Произошла ошибка при регистрации!'))
+        }
+    },
 }
