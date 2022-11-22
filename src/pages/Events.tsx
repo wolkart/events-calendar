@@ -13,14 +13,25 @@ const Events: FC = () => {
     const {user} = useTypedSelector(state => state.authReducer)
 
     useEffect(() => {
-        fetchUsers()
+        fetchUsers(user)
         fetchEvents(user.username)
     }, [])
 
     const addNewEvent = (event: IEvent) => {
         setIsModalOpen(false)
         createEvent(event)
+        success(event)
     }
+
+    const success = (event: IEvent) => {
+        const modal = Modal.success({
+            content: `Событие ${event.description} успешно создано!`,
+        });
+
+        setTimeout(() => {
+            modal.destroy()
+        }, 2000)
+    };
 
     return (
         <Layout style={{height: "calc(100vh - 64px)"}}>

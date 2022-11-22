@@ -7,10 +7,12 @@ import UserService from "../../../api/UserService";
 export const EventActions = {
     setGuest: (payload: IUser[]): SetGuestsAction => ({type: EventActionEnum.SET_GUEST, payload}),
     setEvent: (payload: IEvent[]): SetEventsAction => ({type: EventActionEnum.SET_EVENT, payload}),
-    fetchUsers: () => async (dispatch: AppDispatch) => {
+    fetchUsers: (currentUser: IUser) => async (dispatch: AppDispatch) => {
         try {
-            const response = await UserService.getUsers()
-            dispatch(EventActions.setGuest(response.data))
+            // const response = await UserService.getUsers()
+            // dispatch(EventActions.setGuest(response.data))
+            const users = UserService.getUsers().filter(user => user.username !== currentUser.username) as IUser[]
+            dispatch(EventActions.setGuest(users))
         } catch (e) {
             console.log(e)
         }

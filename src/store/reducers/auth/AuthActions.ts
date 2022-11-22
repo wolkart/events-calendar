@@ -12,14 +12,16 @@ export const AuthActions = {
         try {
             dispatch(AuthActions.setIsLoading(true))
             setTimeout(async () => {
-                const response = await UserService.getUsers()
-                const mockUser = response.data.find(user => user.username === username && user.password === password)
+                const users = UserService.getUsers() as IUser[]
+                // const response = await UserService.getUsers()
+                // const mockUser = response.data.find(user => user.username === username && user.password === password)
+                const currentUser = users.find(user => user.username === username && user.password === password)
 
-                if (mockUser) {
+                if (currentUser) {
                     dispatch(AuthActions.setError(''))
                     localStorage.setItem("auth", "true")
-                    localStorage.setItem("username", mockUser.username)
-                    dispatch(AuthActions.setUser(mockUser))
+                    localStorage.setItem("currentUser", currentUser.username)
+                    dispatch(AuthActions.setUser(currentUser))
                     dispatch(AuthActions.setIsAuth(true))
                 } else {
                     dispatch(AuthActions.setError('Вы ввели не правильный логин или пароль.'))
@@ -33,7 +35,7 @@ export const AuthActions = {
     },
     logout: () => async (dispatch: AppDispatch) => {
         localStorage.removeItem("auth")
-        localStorage.removeItem("username")
+        localStorage.removeItem("currentUser")
         dispatch(AuthActions.setUser({} as IUser))
         dispatch(AuthActions.setIsAuth(false))
     },
@@ -41,13 +43,18 @@ export const AuthActions = {
         try {
             dispatch(AuthActions.setIsLoading(true))
             setTimeout(async () => {
-                const response = await UserService.getUsers()
-                const existingName = response.data.find(user => user.username === username)
+                const users = UserService.getUsers() as IUser[]
+                // const response = await UserService.getUsers()
+                // const existingName = response.data.find(user => user.username === username)
+                const existingName = users.find(user => user.username === username)
 
                 if (!existingName) {
                     dispatch(AuthActions.setError(''))
+                    users.push({username, password})
+                    UserService.setUsers(users)
+
                     localStorage.setItem("auth", "true")
-                    localStorage.setItem("username", username)
+                    localStorage.setItem("currentUser", username)
                     dispatch(AuthActions.setUser({username, password}))
                     dispatch(AuthActions.setIsAuth(true))
                 } else {

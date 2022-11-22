@@ -6,6 +6,7 @@ import {IEvent} from "../models/IEvent";
 import {Moment} from "moment";
 import {formatDate} from "../utils/formatDate";
 import {useTypedSelector} from "../hooks/useTypedSelector";
+import moment from 'moment';
 
 interface EventFormProps {
     guests: IUser[]
@@ -19,15 +20,25 @@ export const EventForm: FC<EventFormProps> = ({guests, submit}) => {
         date: "",
         description: ""
     } as IEvent)
-
+    const [date, setDate] = useState<Moment | null>(null)
     const {user} = useTypedSelector(state => state.authReducer)
 
     const selectDate = (date: Moment | null) => {
-        if (date) setEvent({...event, date: formatDate(date.toDate())})
+        if (date) {
+            setEvent({...event, date: formatDate(date.toDate())})
+            setDate(date)
+        }
+
+    }
+
+    const onChangeSelect = (guest: string) => {
+        setEvent({...event, guest})
     }
 
     const submitForm = () => {
         submit({...event, author: user.username})
+        setEvent({...event, description: '', guest: ''})
+        setDate(null)
     }
 
     return (
@@ -52,8 +63,10 @@ export const EventForm: FC<EventFormProps> = ({guests, submit}) => {
                 label="Дата события"
                 name="date"
                 rules={[rules.required(), rules.isDateAfter('Нельзя создать событие для прошедших дат!')]}
+                valuePropName={event.date}
             >
                 <DatePicker
+                    value={date}
                     onChange={date => selectDate(date)}
                 />
             </Form.Item>
@@ -61,9 +74,11 @@ export const EventForm: FC<EventFormProps> = ({guests, submit}) => {
                 label="Гость"
                 name="guest"
                 rules={[rules.required()]}
+                valuePropName={event.guest}
             >
                 <Select
-                    onChange={(guest: string) => setEvent({...event, guest})}
+                    value={event.guest}
+                    onChange={onChangeSelect}
                     options={guests.map(guest => ({value: guest.username, label: guest.username,}))}
                 />
             </Form.Item>

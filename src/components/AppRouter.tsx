@@ -20,6 +20,10 @@ const AppRouter: FC = () => {
                 path={RouteNames.LOGIN}
                 element={<Navigate replace to={RouteNames.EVENTS}/>}
             />
+            <Route
+                path={RouteNames.REGISTRATION}
+                element={<Navigate replace to={RouteNames.EVENTS}/>}
+            />
         </Routes>
         :
         <Routes>

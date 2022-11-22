@@ -17,8 +17,8 @@ export enum RouteNames {
 }
 
 export const publicRoutes: IRoute[] = [
-    {path: RouteNames.LOGIN, exact: true, component: Login},
-    {path: RouteNames.REGISTRATION, exact: true, component: Registration}
+    {path: RouteNames.REGISTRATION, exact: true, component: Registration},
+    {path: RouteNames.LOGIN, exact: true, component: Login}
 ]
 
 export const privateRoutes: IRoute[] = [

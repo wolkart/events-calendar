@@ -31,12 +31,20 @@ const Navbar: FC = () => {
                             <span style={{color: 'white', fontWeight: 'bold', marginRight: '10px'}}>
                                 Гость
                             </span>
-                            <Menu.Item
-                                key={1}
-                                onClick={() => router(RouteNames.LOGIN)}
-                            >
-                                Логин
-                            </Menu.Item>
+                            <>
+                                <Menu.Item
+                                    key={1}
+                                    onClick={() => router(RouteNames.LOGIN)}
+                                >
+                                    Вход
+                                </Menu.Item>
+                                <Menu.Item
+                                    key={2}
+                                    onClick={() => router(RouteNames.REGISTRATION)}
+                                >
+                                    Регистрация
+                                </Menu.Item>
+                            </>
                         </>}
                 </Menu>
             </Row>
